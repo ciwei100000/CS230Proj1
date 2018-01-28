@@ -14,11 +14,11 @@ bool Sphere::Intersection(const Ray& ray, std::vector<Hit>& hits) const
     {
         double t0 = -dot(w,v) - sqrt(D);
         double t1 = -dot(w,v) + sqrt(D);
-        if (t1 < 0)
+        if (t1 < small_t)
         {
             return false;
         }
-        else if (t0 < 0)
+        else if (t0 < small_t)
         {
             hit.object = *this;
             hit.t = 0;
