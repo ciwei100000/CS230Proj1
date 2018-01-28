@@ -27,6 +27,7 @@ bool Sphere::Intersection(const Ray& ray, std::vector<Hit>& hits) const
             hit.t = t1;
             hit.ray_exiting = true;
             hits.push_back(hit);
+            return true;
         }
         else{
             hit.object = *this;
@@ -36,6 +37,7 @@ bool Sphere::Intersection(const Ray& ray, std::vector<Hit>& hits) const
             hit.t = t1;
             hit.ray_exiting = true;
             hits.push_back(hit);
+            return true;
         }
     }
     return false;
