@@ -13,7 +13,7 @@ Camera::~Camera()
 void Camera::Position_And_Aim_Camera(const vec3& position_input,
     const vec3& look_at_point,const vec3& pseudo_up_vector)
 {
-    position=position_input;
+    position=position_input;  //camera postion
     look_vector=(look_at_point-position).normalized();
     horizontal_vector=cross(look_vector,pseudo_up_vector).normalized();
     vertical_vector=cross(horizontal_vector,look_vector).normalized();
@@ -43,5 +43,9 @@ vec3 Camera::World_Position(const ivec2& pixel_index)
 {
     vec3 result;
     // TODO
+    vec2 position_on_film = pixel_index * pixel_size + min;
+    result[0] = position_on_film[0];
+    result[1] = position_on_film[1];
+    result[2] = 0;
     return result;
 }
