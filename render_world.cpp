@@ -25,13 +25,36 @@ Render_World::~Render_World()
 Object* Render_World::Closest_Intersection(const Ray& ray, Hit& hit)
 {
     // TODO
+    std:vector<Hit> hits;
+    
+    if (objects.empty)
+    {
+        return 0;
+    }
+    
+    for (std::vector<Object*>::const_iterator ob = objects.begin(); ob != objects.end ; ++ob)
+    {
+        *ob->Intersection(ray, hits);
+    }
+    
+    if (!hits.empty)
+    {
+        vector<Object*>::iterator closest_hit = *std::min_element(hits.begin(),hits.end());
+        int closest_hit_position = std:distance(hits.begin(), closest_hit);
+        hit = *closest_hit;
+        return objects[closest_hit_position];
+        
+    }
+    
     return 0;
 }
 
 // set up the initial view ray and call
 void Render_World::Render_Pixel(const ivec2& pixel_index)
 {
-    Ray ray; // TODO: set up the initial view ray here
+    vec3 world_postition_pixel = Camera.World_Position(pixel_index);
+    vec3 direction_input = world_postition_pixel - camera.position;
+    Ray ray(camera.position, direction_input); // TODO: set up the initial view ray here
     vec3 color=Cast_Ray(ray,1);
     camera.Set_Pixel(pixel_index,Pixel_Color(color));
 }
