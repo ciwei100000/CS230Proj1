@@ -20,10 +20,15 @@ struct Hit
     // normal that you compute.
     bool ray_exiting;
     
-    bool operator<(const Hit &h1) const
+    bool operator<(const Hit& h1) const
     {
-        return t < h1.t;   
-    } 
+        return (t < h1.t);   
+    }
+    
+    bool operator<(const double t1) const
+    {
+        return (t < t1);
+    }
 };
 
 #endif
