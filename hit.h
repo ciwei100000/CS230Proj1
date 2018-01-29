@@ -23,7 +23,6 @@ struct Hit
     Hit():object(0),t(0),ray_exiting(false)
     {}
     
-    Hit()
     
     bool operator<(const Hit& h1) const
     {
