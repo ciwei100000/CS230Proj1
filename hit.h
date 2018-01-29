@@ -25,9 +25,19 @@ struct Hit
         return (t < h1.t);   
     }
     
+    bool operator>(const Hit& h1) const
+    {
+        return (t > h1.t);   
+    }
+    
     bool operator<(const double t1) const
     {
         return (t < t1);
+    }
+    
+    bool operator>(const double t1) const
+    {
+        return (t > t1);
     }
 };
 

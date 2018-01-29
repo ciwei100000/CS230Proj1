@@ -25,27 +25,27 @@ Render_World::~Render_World()
 Object* Render_World::Closest_Intersection(const Ray& ray, Hit& hit)
 {
     // TODO
-    std:vector<Hit> hits;
+    std::vector<Hit> hits;
     
-    if (objects.empty)
+    if (objects.empty())
     {
         return 0;
     }
     
-    for (std::vector<Object*>::const_iterator ob = objects.begin(); ob != objects.end ; ++ob)
+    for (std::vector<Object*>::const_iterator ob = objects.begin(); ob != objects.end() ; ++ob)
     {
-        *ob->Intersection(ray, hits);
+        (*ob)->Intersection(ray, hits);
     }
     
-    if (!hits.empty)
+    if (!hits.empty())
     {
-        vector<Object*>::iterator hit_iter = hits.begin();
-        vector<Object*>* closest_hit = 0;
+        std::vector<Hit>::iterator hit_iter = hits.begin();
+        std::vector<Hit>::iterator closest_hit = hits.end();
         while (hit_iter != hits.end())
         {
             if(*hit_iter > small_t)
             {
-                if(closest_hit == 0){
+                if(closest_hit == hits.end()){
                     closest_hit = hit_iter;
                 }
                 else if (*hit_iter < *closest_hit)
@@ -55,9 +55,9 @@ Object* Render_World::Closest_Intersection(const Ray& ray, Hit& hit)
             }            
             ++hit_iter;
         }
-        if (closest_hit != 0)
+        if (closest_hit != hits.end())
         {
-            int closest_hit_position = std:distance(hits.begin(), closest_hit);
+            int closest_hit_position = std::distance(hits.begin(), closest_hit);
             hit = *closest_hit;
             return objects[closest_hit_position];
         }      
@@ -69,7 +69,7 @@ Object* Render_World::Closest_Intersection(const Ray& ray, Hit& hit)
 // set up the initial view ray and call
 void Render_World::Render_Pixel(const ivec2& pixel_index)
 {
-    vec3 world_postition_pixel = Camera.World_Position(pixel_index);
+    vec3 world_postition_pixel = camera.World_Position(pixel_index);
     vec3 direction_input = world_postition_pixel - camera.position;
     Ray ray(camera.position, direction_input); // TODO: set up the initial view ray here
     vec3 color=Cast_Ray(ray,recursion_depth_limit);
@@ -90,7 +90,6 @@ vec3 Render_World::Cast_Ray(const Ray& ray,int recursion_depth)
     // TODO
     Hit hit;
     Object* closest_object = Closest_Intersection(ray, hit);
-    Shader* pixel_shader = 0;
     
     vec3 color;
     // determine the color here
@@ -102,7 +101,7 @@ vec3 Render_World::Cast_Ray(const Ray& ray,int recursion_depth)
     else
     {
        vec3 intersection_point = ray.Point(hit.t);
-       vec3 normal = closest_object.Normal(intersection_point);
+       vec3 normal = closest_object->Normal(intersection_point);
        vec3 same_side_normal = hit.ray_exiting?normal:-normal;
        color = closest_object->material_shader->Shade_Surface(ray,intersection_point,same_side_normal,recursion_depth);
     }   

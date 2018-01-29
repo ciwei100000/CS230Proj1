@@ -9,7 +9,7 @@ bool Sphere::Intersection(const Ray& ray, std::vector<Hit>& hits) const
     vec3 v = ray.endpoint - center;
     vec3 w = ray.direction;
     Hit hit;
-    double D = dot(w,v)^2-dot(w,w)*(dot(v,v)-radius^2);
+    double D = dot(w,v)*dot(w,v)-dot(w,w)*(dot(v,v)-radius*radius);
     if (D > 0)
     {
         double t0 = -dot(w,v) - sqrt(D);
@@ -20,7 +20,7 @@ bool Sphere::Intersection(const Ray& ray, std::vector<Hit>& hits) const
         }
         else if (t0 < 0)
         {
-            hit.object = *this;
+            hit.object = this;
             hit.t = 0;
             hit.ray_exiting = false;
             hits.push_back(hit);
@@ -30,7 +30,7 @@ bool Sphere::Intersection(const Ray& ray, std::vector<Hit>& hits) const
             return true;
         }
         else{
-            hit.object = *this;
+            hit.object = this;
             hit.t = t0;
             hit.ray_exiting = false;
             hits.push_back(hit);
@@ -47,6 +47,6 @@ vec3 Sphere::Normal(const vec3& point) const
 {
     vec3 normal;
     // TODO: set the normal
-    normal = (point - center).normalized;
+    normal = (point - center).normalized();
     return normal;
 }
