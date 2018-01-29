@@ -8,36 +8,32 @@ bool Sphere::Intersection(const Ray& ray, std::vector<Hit>& hits) const
     // TODO
     vec3 v = ray.endpoint - center;
     vec3 w = ray.direction;
-    Hit hit;
+    Hit hit1,hit2;
     double D = dot(w,v)*dot(w,v)-dot(w,w)*(dot(v,v)-radius*radius);
     //std::cout<<D<<std::endl;
     if (D > 0)
     {
         double t0 = -dot(w,v) - sqrt(D);
         double t1 = -dot(w,v) + sqrt(D);
-        if (t1 < 0)
+        if (t1 >= 0)
         {
-            return false;
-        }
-        else if (t0 < 0)
-        {
-            hit.object = this;
-            hit.t = 0;
-            hit.ray_exiting = false;
-            hits.push_back(hit);
-            hit.t = t1;
-            hit.ray_exiting = true;
-            hits.push_back(hit);
-            return true;
-        }
-        else{
-            hit.object = this;
-            hit.t = t0;
-            hit.ray_exiting = false;
-            hits.push_back(hit);
-            hit.t = t1;
-            hit.ray_exiting = true;
-            hits.push_back(hit);
+            hit1.object = this;
+            hit1.ray_exiting = false;
+            if (t0 < 0)
+            {                
+                hit1.t = 0;
+            }
+            else{
+                hit1.t = t0;
+            }
+            hit2.object = this;
+            hit2.ray_exiting = false;
+            hit2.t = t1;
+            hit2.ray_exiting = true;
+            
+            hits.push_back(hit1);
+
+            hits.push_back(hit2);
             return true;
         }
     }

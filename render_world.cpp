@@ -3,7 +3,7 @@
 #include "object.h"
 #include "light.h"
 #include "ray.h"
-
+#include <map>
 
 Render_World::Render_World()
     :background_shader(0),ambient_intensity(0),enable_shadows(true),
@@ -26,16 +26,24 @@ Object* Render_World::Closest_Intersection(const Ray& ray, Hit& hit)
 {
     // TODO
     std::vector<Hit> hits;
-    std::vector<Object*> objects_intersected;
+    std::map<double, Object*> objects_intersected;
     if (objects.empty())
     {
         return 0;
     }
     
     for (std::vector<Object*>::const_iterator ob = objects.begin(); ob != objects.end() ; ++ob)
-    {
-        if((*ob)->Intersection(ray, hits))
-            objects_intersected.push_back(*ob);
+    {   
+        int size = 0;
+        if((*ob)->Intersection(ray, hits)){
+            for (unsigned int i = 0; i < hits.size()-size; i += 1)
+            {
+                objects_intersected[(hits.end()-1-i)->t] = *ob;
+            }
+
+            //std::cout<<"original "<<hits.back().t<<std::endl;
+            //std::cout<<"original obj "<<*ob<<std::endl;
+        }
     }
     
     if (!hits.empty())
@@ -58,10 +66,10 @@ Object* Render_World::Closest_Intersection(const Ray& ray, Hit& hit)
         }
         if (closest_hit != hits.end())
         {
-            uint closest_hit_position = std::distance(hits.begin(), closest_hit);
             hit = *closest_hit;
-            assert(closest_hit_position <= 2* objects_intersected.size()-1);
-            return objects_intersected[closest_hit_position/2];
+            //std::cout<<"done "<<hit.t<<std::endl;
+            //std::cout<<"done obj "<<objects_intersected[hit.t]<<std::endl;
+            return objects_intersected[hit.t];
         }      
     }
     
