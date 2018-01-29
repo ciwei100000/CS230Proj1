@@ -72,7 +72,7 @@ void Render_World::Render_Pixel(const ivec2& pixel_index)
     vec3 world_postition_pixel = Camera.World_Position(pixel_index);
     vec3 direction_input = world_postition_pixel - camera.position;
     Ray ray(camera.position, direction_input); // TODO: set up the initial view ray here
-    vec3 color=Cast_Ray(ray,1);
+    vec3 color=Cast_Ray(ray,recursion_depth_limit);
     camera.Set_Pixel(pixel_index,Pixel_Color(color));
 }
 
@@ -90,19 +90,22 @@ vec3 Render_World::Cast_Ray(const Ray& ray,int recursion_depth)
     // TODO
     Hit hit;
     Object* closest_object = Closest_Intersection(ray, hit);
+    Shader* pixel_shader = 0;
+    
+    vec3 color;
+    // determine the color here
     
     if (closest_object == 0)
     {
-        return background_shader;
+        color = background_shader->Shade_Surface(ray,vec3(0,0,0),vec3(0,0,0),recursion_depth);
     }
-    
-    vec3 intersection_point = ray.Point(hit.t);
-    vec3 same_side_normal = 
-    
-    vec3 color;
-
-    // determine the color here
-    color = closest_object->material_shader->Shade_Surface(ray,intersection_point, )
+    else
+    {
+       vec3 intersection_point = ray.Point(hit.t);
+       vec3 normal = closest_object.Normal(intersection_point);
+       vec3 same_side_normal = hit.ray_exiting?normal:-normal;
+       color = closest_object->material_shader->Shade_Surface(ray,intersection_point,same_side_normal,recursion_depth);
+    }   
 
     return color;
 }
