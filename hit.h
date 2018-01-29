@@ -19,11 +19,7 @@ struct Hit
     // "object"?  This will tell you whether you will need to reverse the
     // normal that you compute.
     bool ray_exiting;
-    
-    Hit():object(0),t(0),ray_exiting(false)
-    {}
-    
-    
+      
     bool operator<(const Hit& h1) const
     {
         return (t < h1.t);   
