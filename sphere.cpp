@@ -10,6 +10,7 @@ bool Sphere::Intersection(const Ray& ray, std::vector<Hit>& hits) const
     vec3 w = ray.direction;
     Hit hit;
     double D = dot(w,v)*dot(w,v)-dot(w,w)*(dot(v,v)-radius*radius);
+    //std::cout<<D<<std::endl;
     if (D > 0)
     {
         double t0 = -dot(w,v) - sqrt(D);
