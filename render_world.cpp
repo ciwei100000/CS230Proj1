@@ -120,7 +120,7 @@ vec3 Render_World::Cast_Ray(const Ray& ray,int recursion_depth)
        //std::cout<<closest_object<<std::endl;
        vec3 intersection_point = ray.Point(hit.t);
        vec3 normal = closest_object->Normal(intersection_point);
-       vec3 same_side_normal = hit.ray_exiting?normal:-normal;
+       vec3 same_side_normal = hit.ray_exiting?-normal:normal;
        color = closest_object->material_shader->Shade_Surface(ray,intersection_point,same_side_normal,recursion_depth);
     }   
     //std::cout<<color<<std::endl;
