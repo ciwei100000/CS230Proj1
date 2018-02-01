@@ -5,7 +5,7 @@
 #include <iostream>
 #include <cassert>
 
-extern bool debug_pixel;
+extern bool debug_pixel; //For debug, added by me
 
 static const double pi = 4 * atan(1.0);
 
