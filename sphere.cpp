@@ -34,6 +34,7 @@ bool Sphere::Intersection(const Ray& ray, std::vector<Hit>& hits) const
             hits.push_back(hit1);
 
             hits.push_back(hit2);
+
             return true;
         }
     }

@@ -5,6 +5,8 @@
 #include <iostream>
 #include <cassert>
 
+extern bool debug_pixel;
+
 static const double pi = 4 * atan(1.0);
 
 template<class T, int n> struct vec;
