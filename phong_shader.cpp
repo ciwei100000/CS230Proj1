@@ -13,6 +13,7 @@ Shade_Surface(const Ray& ray,const vec3& intersection_point,
     // TODO: determine the color
     double distance = 0;
     double costheta = 0;
+    Object* shadowray_hit_object = 0;
     vec3 n = same_side_normal;
     std::vector<Light*> lights = world.lights;
     Light* light;
@@ -25,13 +26,31 @@ Shade_Surface(const Ray& ray,const vec3& intersection_point,
         I = light->position - intersection_point; // Incoming Light Vector
         l = I.normalized();
         distance = I.magnitude();
+        
+        if (world.enable_shadows == true)
+        {
+        	Ray shadowray(intersection_point, l);
+        	Hit shadowhit;
+        	
+        	shadowray_hit_object = world.Closest_Intersection(shadowray,shadowhit);
+        	if (shadowhit > distance)
+        	{
+        		shadowray_hit_object = 0;
+        	}
+        }
+        
         I_itensity = light->Emitted_Light(ray)/(distance * distance);
         if (dot(l,n)>0)
         {
         	costheta = dot((2 * dot(l,n) * n - l), -ray.direction);
-        }        
-        color += I_itensity * (color_diffuse * std::max(0.0, dot(n,l)) + 
+        }
+        
+        if (!shadowray_hit_object)
+        {
+        	color += I_itensity * (color_diffuse * std::max(0.0, dot(n,l)) + 
         		 color_specular * pow(std::max(0.0, costheta),specular_power));
+        }     
+        
     }
     return color;
 }

@@ -32,14 +32,16 @@ Object* Render_World::Closest_Intersection(const Ray& ray, Hit& hit)
         return 0;
     }
     
+    int size = 0;
+    
     for (std::vector<Object*>::const_iterator ob = objects.begin(); ob != objects.end() ; ++ob)
     {   
-        int size = 0;
         if((*ob)->Intersection(ray, hits)){
             for (unsigned int i = 0; i < hits.size()-size; i += 1)
             {
                 objects_intersected[(hits.end()-1-i)->t] = *ob;
             }
+            size = hits.size();
         }
     }
     
