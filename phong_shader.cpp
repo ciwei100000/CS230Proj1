@@ -26,7 +26,7 @@ Shade_Surface(const Ray& ray,const vec3& intersection_point,
         l = I.normalized();
         distance = I.magnitude();
         I_itensity = light->Emitted_Light(ray)/(distance * distance);
-        costheta = dot((2 * distance * dot(l,n) * n - I).normalized(), n);  
+        costheta = dot((2 * dot(l,n) * n - l), ray.direction);  
         color += I_itensity * (color_diffuse * std::max(0.0, dot(n,l)) + 
         		 color_specular * std::max(0.0, pow(costheta, specular_power)));
        	//std::cout<<dot(n,l)<<std::endl;
