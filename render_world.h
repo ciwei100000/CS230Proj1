@@ -10,7 +10,6 @@ class Light;
 class Shader;
 class Ray;
 
-
 class Render_World
 {
 public:
