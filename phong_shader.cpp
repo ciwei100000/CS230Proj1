@@ -9,7 +9,7 @@ vec3 Phong_Shader::
 Shade_Surface(const Ray& ray,const vec3& intersection_point,
     const vec3& same_side_normal,int recursion_depth) const
 {
-    vec3 color, I, l, I_itensity;
+    vec3 color, I, i, I_itensity;
     // TODO: determine the color
     double distance = 0;
     double costheta = 0;
@@ -24,12 +24,12 @@ Shade_Surface(const Ray& ray,const vec3& intersection_point,
     {
         light = *light_iter;
         I = light->position - intersection_point; // Incoming Light Vector
-        l = I.normalized();
+        i = I.normalized();
         distance = I.magnitude();
         
         if (world.enable_shadows == true)
         {
-        	Ray shadowray(intersection_point, l);
+        	Ray shadowray(intersection_point, i);
         	Hit shadowhit;
         	
         	shadowray_hit_object = world.Closest_Intersection(shadowray,shadowhit);
@@ -40,14 +40,14 @@ Shade_Surface(const Ray& ray,const vec3& intersection_point,
         }
         
         I_itensity = light->Emitted_Light(ray)/(distance * distance);
-        if (dot(l,n)>0)
+        if (dot(i,n)>0)
         {
-        	costheta = dot((2 * dot(l,n) * n - l), -ray.direction);
+        	costheta = dot((2 * dot(i,n) * n - i), -ray.direction);
         }
         
         if (!shadowray_hit_object)
         {
-        	color += I_itensity * (color_diffuse * std::max(0.0, dot(n,l)) + 
+        	color += I_itensity * (color_diffuse * std::max(0.0, dot(n,i)) + 
         		 color_specular * pow(std::max(0.0, costheta),specular_power));
         }     
         
