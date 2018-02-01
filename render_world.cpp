@@ -26,7 +26,7 @@ Object* Render_World::Closest_Intersection(const Ray& ray, Hit& hit)
 {
     // TODO
     std::vector<Hit> hits;
-    std::map<double, Object*> objects_intersected;
+    std::map<Hit, Object*> objects_intersected;
     if (objects.empty())
     {
         return 0;
@@ -39,9 +39,9 @@ Object* Render_World::Closest_Intersection(const Ray& ray, Hit& hit)
         if((*ob)->Intersection(ray, hits)){
             for (unsigned int i = 0; i < hits.size()-size; i += 1)
             {
-            	if ((hits.end()-1-i)->t > small_t)
+            	if (*(hits.end()-1-i)> small_t)
             	{
-            		objects_intersected[(hits.end()-1-i)->t] = *ob;
+            		objects_intersected[*(hits.end()-1-i)] = *ob;
             	}                
             }
             size = hits.size();
@@ -50,7 +50,7 @@ Object* Render_World::Closest_Intersection(const Ray& ray, Hit& hit)
     
     if (!objects_intersected.empty())
     {
-    	std::cout<<objects_intersected.begin()->first<<" "<<objects_intersected.begin()->second<<std::endl;
+    	hit = objects_intersected.begin()->first;
 		return objects_intersected.begin()->second;
     }
     return 0;
