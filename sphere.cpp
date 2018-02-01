@@ -10,7 +10,6 @@ bool Sphere::Intersection(const Ray& ray, std::vector<Hit>& hits) const
     vec3 w = ray.direction;
     Hit hit1,hit2;
     double D = dot(w,v)*dot(w,v)-dot(w,w)*(dot(v,v)-radius*radius);
-    //std::cout<<D<<std::endl;
     if (D > 0)
     {
         double t0 = -dot(w,v) - sqrt(D);
@@ -32,7 +31,6 @@ bool Sphere::Intersection(const Ray& ray, std::vector<Hit>& hits) const
             hit2.ray_exiting = true;
             
             hits.push_back(hit1);
-
             hits.push_back(hit2);
 
             return true;
