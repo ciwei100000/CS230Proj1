@@ -39,36 +39,20 @@ Object* Render_World::Closest_Intersection(const Ray& ray, Hit& hit)
         if((*ob)->Intersection(ray, hits)){
             for (unsigned int i = 0; i < hits.size()-size; i += 1)
             {
-                objects_intersected[(hits.end()-1-i)->t] = *ob;
+            	if ((hits.end()-1-i)->t > small_t)
+            	{
+            		objects_intersected[(hits.end()-1-i)->t] = *ob;
+            	}                
             }
             size = hits.size();
         }
     }
     
-    if (!hits.empty())
+    if (!objects_intersected.empty())
     {
-        std::vector<Hit>::iterator hit_iter = hits.begin();
-        std::vector<Hit>::iterator closest_hit = hits.end();
-        while (hit_iter != hits.end())
-        {
-            if(*hit_iter > small_t)
-            {
-                if(closest_hit == hits.end()){
-                    closest_hit = hit_iter;
-                }
-                else if (*hit_iter < *closest_hit)
-                {
-                    closest_hit = hit_iter; 
-                }
-            }            
-            ++hit_iter;
-        }
-        if (closest_hit != hits.end())
-        {
-            hit = *closest_hit;
-            return objects_intersected[hit.t];
-        }      
-    } 
+    	std::cout<<objects_intersected.begin()->first<<" "<<objects_intersected.begin()->second<<std::endl;
+		return objects_intersected.begin()->second;
+    }
     return 0;
 }
 
