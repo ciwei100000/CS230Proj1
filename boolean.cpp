@@ -40,6 +40,8 @@ bool Boolean::Intersection(const Ray& ray, std::vector<Hit>& hits) const
     	Hit hit = hit_queue_i.first;
     	Object* hitted_object = hit_queue_i.second; 
     	
+    	
+    	
     	if(false)
         {
         	std::cout<<this<<" queue hit: "<<hit.t<<" "<<hit.object<<" Bool Obj "<<hitted_object<<" queue size: "<<hit_queue.size()<<std::endl;
@@ -49,31 +51,37 @@ bool Boolean::Intersection(const Ray& ray, std::vector<Hit>& hits) const
     	{
     		if(!hit.t)
     		{
+    			if(debug_pixel == true)
+        		{
+        			std::cout<<this<<" type_union O Hit"<<hit.t<<" "<<hit.object<<" A: "<<A<<" "<<hit_position[0]<<" B: "<<B<<" "<<hit_position[1]<<std::endl;
+        		}
+        		
     			hit_position[hitted_object == B] = 1;
     			hits.push_back(hit);
+    			if_hit = true;
     			continue;
     		}
     		if(!hit_position[0]&&!hit_position[1])
     		{
-    			hit_position[hitted_object == B] = 1;
-    			hits.push_back(hit);
-    			if_hit = true;
     			if(debug_pixel == true)
         		{
         			std::cout<<this<<" type_union I Hit"<<hit.t<<" "<<hit.object<<" A: "<<A<<" "<<hit_position[0]<<" B: "<<B<<" "<<hit_position[1]<<std::endl;
         		}
+    			hit_position[hitted_object == B] = 1;
+    			hits.push_back(hit);
+    			if_hit = true;
     			continue;
     		}
 
     		if(hit_position[hitted_object == B] && !hit_position[hitted_object == A])
     		{
-    			hit_position[hitted_object == B] = 0;
-    			hits.push_back(hit);
-    			if_hit = true;
     			if(debug_pixel == true)
         		{
         			std::cout<<this<<" type_union II Hit"<<hit.t<<" "<<hit.object<<" A: "<<A<<" "<<hit_position[0]<<" B: "<<B<<" "<<hit_position[1]<<std::endl;
         		}
+    			hit_position[hitted_object == B] = 0;
+    			hits.push_back(hit);
+    			if_hit = true;
     			continue;
     		}
     	}
@@ -82,53 +90,63 @@ bool Boolean::Intersection(const Ray& ray, std::vector<Hit>& hits) const
     	{
     		if(!hit.t)
     		{
+    			if(debug_pixel == true)
+        		{
+        			std::cout<<this<<" intercept case O Hit"<<hit.t<<" "<<hit.object<<" A: "<<A<<" "<<hit_position[0]<<" B: "<<B<<" "<<hit_position[1]<<std::endl;
+        		}
+        		
     			hit_position[hitted_object == B] = 1;
     			if (hit_position[hitted_object == A])
     			{
     				hits.push_back(hit);
+    				if_hit = true;
     			}
     			continue;
     		}
     		
     		if(hit_position[0]&&hit_position[1])
     		{
+    			if(debug_pixel == true)
+        		{
+        			std::cout<<this<<" intercept case I Hit"<<hit.t<<" "<<hit.object<<" A: "<<A<<" "<<hit_position[0]<<" B: "<<B<<" "<<hit_position[1]<<std::endl;
+        		}
     			hit_position[hitted_object == B] = 0;
     			hits.push_back(hit);
     			if_hit = true;
-    			if(debug_pixel == true)
-        		{
-        			std::cout<<"intercept case I Hit"<<hit.t<<" "<<hit.object<<std::endl;
-        		}
     			continue;
     		}
     		if (!hit_position[hitted_object == B] && hit_position[hitted_object == A])
     		{
-    			hit_position[hitted_object == B] = 0;
-    			hits.push_back(hit);
-    			if_hit = true;
     			if(debug_pixel == true)
         		{
-        			std::cout<<"intercept case II Hit"<<hit.t<<" "<<hit.object<<std::endl;
+        			std::cout<<this<<" intercept case II Hit"<<hit.t<<" "<<hit.object<<" A: "<<A<<" "<<hit_position[0]<<" B: "<<B<<" "<<hit_position[1]<<std::endl;
         		}
+    			hit_position[hitted_object == B] = !hit_position[hitted_object == B];
+    			hits.push_back(hit);
+    			if_hit = true;
     			continue;
     		}
     	}
 
     	if (type == type_difference)
     	{
-    		if(!hit.t)
+    		if(!hit.t )
     		{
+    			if(debug_pixel == true)
+       			{
+       				std::cout<<this<<" diff case O Hit"<<hit.t<<" "<<hit.object<<" A: "<<A<<" "<<hit_position[0]<<" B: "<<B<<" "<<hit_position[1]<<std::endl;
+       			}
     			hit_position[hitted_object == B] = 1;
     			if (hit_position[0]&&!hit_position[1])
     			{
     				hits.push_back(hit);
+    				if_hit = true;
     			}
     			continue;
     		}
 
     		if(hit_position[hitted_object == A] == (hitted_object == B))
     		{
-
    				if(debug_pixel == true)
        			{
        				std::cout<<this<<" diff case I Hit"<<hit.t<<" "<<hit.object<<" A: "<<A<<" "<<hit_position[0]<<" B: "<<B<<" "<<hit_position[1]<<std::endl;
@@ -139,12 +157,14 @@ bool Boolean::Intersection(const Ray& ray, std::vector<Hit>& hits) const
    				continue;
    			}
    		}
-   		hit_position[hitted_object == B] = !hit_position[hitted_object == B];
    		
    		if(debug_pixel == true)
         {
         	std::cout<<this<<" Pass: "<<hit.t<<" "<<hit.object<<" A: "<<A<<" "<<hit_position[0]<<" B: "<<B<<" "<<hit_position[1]<<std::endl;
         }
+        
+   		hit_position[hitted_object == B] = !hit_position[hitted_object == B];
+   		
    	}	
 
 

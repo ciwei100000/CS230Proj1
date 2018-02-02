@@ -21,6 +21,7 @@ Intersection(const Ray& ray, std::vector<Hit>& hits) const
     	
     	hits.push_back(hit1);
     	
+    	
         if(dot(w,normal)>0)
         {
         	hit2.object = this;
