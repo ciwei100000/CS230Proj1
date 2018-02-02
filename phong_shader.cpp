@@ -30,9 +30,16 @@ Shade_Surface(const Ray& ray,const vec3& intersection_point,
         if (world.enable_shadows == true)
         {
         	Ray shadowray(intersection_point, i);
-        	Hit shadowhit;
+        	Hit shadowhit;     	
+        	
         	
         	shadowray_hit_object = world.Closest_Intersection(shadowray,shadowhit);
+        	
+        	if(debug_pixel == true)
+        	{
+        		std::cout<<"shadow "<<shadowray_hit_object<<" "<<shadowhit.t<<" " <<shadowhit.object<<std::endl;
+        	}
+        	
         	if (shadowhit > distance)
         	{
         		shadowray_hit_object = 0;
@@ -47,6 +54,10 @@ Shade_Surface(const Ray& ray,const vec3& intersection_point,
         
         if (!shadowray_hit_object)
         {
+        	if(debug_pixel == true)
+        	{
+        		std::cout<<shadowray_hit_object<<std::endl;
+        	}
         	color += I_itensity * (color_diffuse * std::max(0.0, dot(n,i)) + 
         		 color_specular * pow(std::max(0.0, costheta),specular_power));
         }     

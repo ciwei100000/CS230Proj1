@@ -13,19 +13,12 @@ Intersection(const Ray& ray, std::vector<Hit>& hits) const
     vec3 w = ray.direction;
     vec3 v = ray.endpoint - x1;
     Hit hit;
-    if (dot(w,normal) != 0)
+    if (dot(w,normal) < 0)
     {
         double t_tmp = -dot(v,normal)/dot(w,normal);
         hit.object = this;
         hit.ray_exiting = false;
-        if (t_tmp < 0)
-        {
-            hit.t = 0;         
-        }
-        else
-        {
-            hit.t = t_tmp;
-        }
+        hit.t = t_tmp;
         hits.push_back(hit);
         return true;
     }
