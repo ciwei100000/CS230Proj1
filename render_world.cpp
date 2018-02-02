@@ -4,6 +4,7 @@
 #include "light.h"
 #include "ray.h"
 #include <map>
+#include <utility>
 
 Render_World::Render_World()
     :background_shader(0),ambient_intensity(0),enable_shadows(true),

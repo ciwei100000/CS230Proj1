@@ -14,23 +14,25 @@ bool Sphere::Intersection(const Ray& ray, std::vector<Hit>& hits) const
     {
         double t0 = -dot(w,v) - sqrt(D);
         double t1 = -dot(w,v) + sqrt(D);
-        hit1.object = this;
-        hit1.ray_exiting = false;
-        hit1.t = t0;
-        hit2.object = this;
-        hit2.ray_exiting = false;
-        hit2.t = t1;
-        hit2.ray_exiting = true;
-            
-        hits.push_back(hit1);
-        hits.push_back(hit2);
-            
-        if(debug_pixel == true)
+        if(t1 > 0)
         {
-        	std::cout<<"Sphere: "<<"center: "<<center<<"radius "<<radius<<"Hit: "<<t0<<" "<<t1<<" Address:"<<this<<std::endl;
-        }
+        	hit1.object = this;
+        	hit1.ray_exiting = false;
+        	hit1.t = std::max(0.0, t0);
+        	hit2.object = this;
+        	hit2.t = t1;
+        	hit2.ray_exiting = true;
+        	
+        	hits.push_back(hit1);
+        	hits.push_back(hit2);
+        	
+        	if(debug_pixel == true)
+        	{
+        		std::cout<<"Sphere: "<<"center: "<<center<<"radius "<<radius<<"Hit: "<<t0<<" "<<t1<<" Address:"<<this<<std::endl;
+        	}
 
-         return true;
+        	return true;
+        }           
     }
     return false;
 }
