@@ -1,7 +1,7 @@
 #include "camera.h"
 
 Camera::Camera()
-    :colors(0)
+    :colors(0),antialiasing(0)
 {
 }
 
@@ -39,9 +39,18 @@ void Camera::Set_Resolution(const ivec2& number_pixels_input)
 }
 
 // Find the world position of the input pixel
-vec3 Camera::World_Position(const ivec2& pixel_index)
+vector<vec3> Camera::World_Position(const ivec2& pixel_index)
 {
-    vec3 result;
+    vector<vec3> result;
+    vec3 tmp_world_position;
+    if (antialising > 1)
+    {
+    	int power2 = 1;
+    	while (power2 <= antialising)
+    	{
+    		power >>= 2;
+    	} //round to nearest power of 2
+    }
     // TODO
     vec2 position_on_film = Cell_Center(pixel_index);
     result = position_on_film[0] * horizontal_vector + position_on_film[1] * vertical_vector + film_position;

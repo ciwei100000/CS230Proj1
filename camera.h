@@ -3,6 +3,7 @@
 
 #include <algorithm>
 #include "vec.h"
+#include <vector>
 
 typedef unsigned int Pixel;
 
@@ -38,6 +39,8 @@ public:
     ivec2 number_pixels; // number of pixels: x and y direction
     Pixel* colors; // Pixel data; row-major order
     
+    int antialiasing; //flag for whether to enable antialiasing
+    
     Camera();
     ~Camera();
 
@@ -49,7 +52,7 @@ public:
     void Set_Resolution(const ivec2& number_pixels_input);
 
     // Used for determining the where pixels are
-    vec3 World_Position(const ivec2& pixel_index);
+    std::vector<vec3> World_Position(const ivec2& pixel_index);
     vec2 Cell_Center(const ivec2& index) const
     {
         return min+(vec2(index)+vec2(.5,.5))*pixel_size;
