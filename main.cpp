@@ -45,9 +45,10 @@ int main(int argc, char** argv)
     
     // Parse test scene file
     Parse(world,width,height,input_file);
-
+    
     // Render the image
     world.Render();
+    
 
     // For debugging.  Render only the pixel specified on the commandline.
     // Useful for printing out information about a single pixel.

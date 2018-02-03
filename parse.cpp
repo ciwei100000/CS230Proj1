@@ -155,6 +155,15 @@ void Parse(Render_World& world,int& width,int& height,const char* test_file)
             ss>>world.recursion_depth_limit;
             assert(ss);
         }
+        else if (item=="antialiasing")
+        {
+        	int tmp;
+        	ss>>tmp;
+        	tmp = std::max(tmp,1);
+        	uint count = (uint) log2(tmp);		
+        	world.camera.antialiasing = count;
+        	assert(ss);
+        }
         else
         {
             std::cout<<"Failed to parse: "<<buff<<std::endl;

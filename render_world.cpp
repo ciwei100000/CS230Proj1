@@ -60,11 +60,20 @@ Object* Render_World::Closest_Intersection(const Ray& ray, Hit& hit)
 // set up the initial view ray and call
 void Render_World::Render_Pixel(const ivec2& pixel_index)
 {
-    vec3 world_postition_pixel = camera.World_Position(pixel_index);
-    vec3 direction_input = world_postition_pixel - camera.position;
-    Ray ray(camera.position, direction_input); // TODO: set up the initial view ray here
+	vec3 color;
+    std::vector<vec3> world_postition_pixels = camera.World_Position(pixel_index);
+    if (debug_pixel == true)
+    {
+    	std::cout<<"world_postition_pixels amount: "<<world_postition_pixels.size()<<std::endl;
+    }
+    for (std::vector<vec3>::iterator i = world_postition_pixels.begin(); i != world_postition_pixels.end(); ++i)
+    {
+    	vec3 direction_input = *i - camera.position;
+    	Ray ray(camera.position, direction_input);    
+    	color+=Cast_Ray(ray,recursion_depth_limit);
+    }
     
-    vec3 color=Cast_Ray(ray,recursion_depth_limit);
+    color /= world_postition_pixels.size();
     camera.Set_Pixel(pixel_index,Pixel_Color(color));
 }
 
