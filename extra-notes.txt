@@ -1,0 +1,70 @@
+#########################################################################################
+# CS230 Extra Credit Note:																#
+#																						#
+# This is a note for extra point problem                                            	#
+# Author: Xuqing Liu                                                                 	#
+# Date: Feb 2, 2018                                                                   	#
+# Multisampling Antialiasing is implemented in this project                            	# 
+#                                                                                      	#
+#########################################################################################
+#																						#
+# 1. Add a flag antialiasing in camera clasee and modify camera.World_Position to      	#
+#    return a vector of points of world positions inside a pixel instead of pixel      	#
+#    center. So, the world.Cast_ray will cast more rays on a pixel and the returned    	# 
+#    colors will be averaged to be the color for the pixel.							   	#
+#																					   	#
+# 2. The pixel cell will be divided into several smaller cells, of which the number    	#
+#    is determined by the flag antialiasing. A random point will be selected within    	# 
+#    each new small cells to be returned by camera.World_Position in section 1.		   	#
+#																					   	#
+# 3. The parse.cpp will take the value of antialiasing in the input file, round it to  	#
+#    the previous power of 2 and put its power in camera.antialiasing. 				   	#
+#																					   	#
+# 4. As shown in the below demo, just add one more line beginning with "antialiasing", 	#
+#    followed by the number of sampling for each pixel. e.g 4 means 4x MSAA            	#
+#																					   	#
+# File Modified:																	   	#
+#    camera.h:          add camera::antialiasing;							 		   	#
+#    camera.cpp:        modify camera::World_Position as described in section 1		   	#
+#	 parse.cpp:         Add function to parse antialiasing keyword					   	#
+#    render_world.cpp:  modify world::Render_pixel to take vector of points from		#
+#					    camera::World_Position and average the color returned from		#
+#				       	World::Cast_ray for the pixel.									#
+# Test Cases:																			#
+#    All the test files are in the directory ./Extra-Note. Just simply run:             #
+#         $> ./ray_tacing -i ./Extra-Note/[input]                                       #
+#    Or set up a test file based on this note.											#
+#																						#
+#########################################################################################
+#																						#
+# The following is a demo for setting up input file										#
+#																						#
+#########################################################################################
+size 640 480
+color red 1 0 0
+color blue .2 .2 .8
+color yellow 1 0.775 0.5431
+color white 1 1 1
+color black 0 0 0
+phong_shader red_shader red red white 50
+phong_shader blue_shader blue blue white 50
+phong_shader yellow_shader yellow yellow white 50
+phong_shader white_shader white white white 50
+plane A -1 0 0 -1 0 0 blue_shader
+plane B 1 0 0 1 0 0 blue_shader
+plane C 0 -1 0 0 -1 0 blue_shader
+plane D 0 1 0 0 1 0 blue_shader
+plane E 0 0 -1 0 0 -1 blue_shader
+plane F 0 0 1 0 0 1 blue_shader
+intersection G A B blue_shader
+intersection H C D blue_shader
+intersection I E F blue_shader
+intersection J G H blue_shader
+intersection - I J blue_shader
+point_light .8 .8 4 white 100
+point_light -.2 2 3 white 100
+ambient_light white .3
+enable_shadows 1
+antialiasing 32
+recursion_depth_limit 4
+camera 2 3 4 0 0 0 0 1 0 70
